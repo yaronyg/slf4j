@@ -85,7 +85,7 @@
 			<artifactId>android</artifactId>
 			<version>1.5</version>
 			<scope>system</scope>
-			<systemPath>${env.ANDROID_SDK_HOME}/platforms/android-1.5/android.jar</systemPath>
+			<systemPath>${env.ANDROID_HOME}/platforms/android-1.5/android.jar</systemPath>
 		</dependency>
 	</dependencies>
 
