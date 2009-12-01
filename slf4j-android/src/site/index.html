@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="http://www.slf4j.org/android">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<title>SLF4J Android</title>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="css/site.css" />
+</head>
+<body>
+<script>
+	prefix = '';
+</script>
+
+<script src="templates/header.js"></script>
+<div id="left"><script src="templates/left.js"></script></div>
+<div id="right"><script src="templates/right.js"></script></div>
+<div id="content">
+
+
+<h1>SLF4J Android</h1>
+
+<p>The motivation for the SLF4J Android project was to ease using existing libraries
+which use SLF4J as their logging framework on the <a href="http://developer.android.com">
+Google Android platform</a>.</p>
+
+<p>This project is basically
+a (i) repackaging of the SLF4J API part, together with (ii) a very lightweight binding
+implementation that simply forwards all SLF4J log requests to the
+<a href="http://developer.android.com/reference/android/util/Log.html">logger</a>
+provided on the Google Android platform. The API part is compiled from the
+<em>same</em> code basis of the standard distribution. This is the reason why we decided
+to keep the version numbering in sync with the standard SLF4J releases in order to
+reflect the code basis from which it was built.</p>
+
+<h3>Status</h3>
+<p>The implementation is currently fully functional but has not yet been fully tested in a
+production environment. Let us know if you have used it in production!</p>
+
+<h3>Usage</h3>
+<ul>
+	<li>Assuming that you use the
+	<a href="http://developer.android.com/guide/developing/eclipse-adt.html">Eclipse ADT plugin</a>,
+	simply add <tt>slf4j-android-&lt;version&gt;.jar</tt> to your project classpath.
+	</li>
+	<li>There is no further configuration required.</li>
+	<li>Use loggers as usual:
+		<ul>
+			<li>
+				Declare a logger
+				<br/><code>
+					private static final Log logger = LogFactory.getLog(MyClass.class);
+				</code>
+			</li>
+			<li>Invoke logging methods, e.g.,
+				<br/><code>
+					logger.debug("Some log message. Details: {}", someObject.toString());
+				</code>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+<h3>Log level mapping</h3>
+<p>The following table shows the mapping from SLF4J log levels to log levels in
+the Android platform implemented by the logger binding.</p>
+<table class="bodyTable" cellspacing="4" cellpadding="4" width="300">
+  	<tr><th align="left"><b>SLF4J<b></th><th align="left"><b>Android</b></th></tr>
+  	<tr class="a"><td>TRACE</td><td>VERBOSE</td></tr>
+  	<tr class="alt"><td>DEBUG</td><td>DEBUG</td></tr>
+  	<tr class="a"><td>INFO</td><td>INFO</td></tr>
+  	<tr class="alt"><td>WARN</td><td>WARN</td></tr>
+  	<tr class="a"><td>ERROR</td><td>ERROR</td></tr>
+</table>
+
+<h3>Limitations</h3>
+<p>The Android binding implementation currently does not support
+<a href="http://www.slf4j.org/apidocs/org/slf4j/Marker.html">Markers</a>. All
+logging methods which have a Marker parameter simply delegate to the corresponding
+method without a Marker parameter, i.e., the Marker parameter is silently ignored.</p>
+
+<h3>Download</h3>
+<p>Binary: <a href="android/slf4j-android-1.5.8.jar">slf4j-android-1.5.8.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8.jar.sha1">sha1</a>]<br/>
+Source: <a href="android/slf4j-android-1.5.8-sources.jar">slf4j-android-1.5.8-sources.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8-sources.jar.sha1">sha1</a>]</p>
+
+<h3>Credits</h3>
+<p>Created and maintained by <a href="http://dbis.cs.unibas.ch/team/thorsten-moller/dbis_staff_view">Thorsten M&ouml;ller</a>,
+<a href="http://dbis.cs.unibas.ch/">Databases and Information Systems Group &ndash; University of Basel &ndash; Switzerland</a></p>
+
+<h3>License</h3>
+<p>Source code and binaries are distributed under the <a href="license.html">MIT license</a>.</p>
+
+<script src="templates/footer.js"></script></div>
+</body>
+</html>
