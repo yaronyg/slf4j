@@ -57,32 +57,27 @@ public class AndroidLoggerFactory implements ILoggerFactory
 	public AndroidLogger getLogger(final String name)
 	{
 		// fix for bug #173: trim tag length in case it exceeds maximum length
-		String truncatedName = null;
+		String actualName = null;
 		if (name != null && name.length() > TAG_MAX_LENGTH)
 		{
 			// remove the first part of the name, which usually is the least significant
-			truncatedName = name.substring(name.length() - TAG_MAX_LENGTH, name.length());
+			actualName = name.substring(name.length() - TAG_MAX_LENGTH, name.length());
 		}
 
 		AndroidLogger slogger = null;
 		// protect against concurrent access of the loggerMap
 		synchronized (this)
 		{
-			slogger = loggerMap.get(name);
+			slogger = (actualName != null)? loggerMap.get(actualName) : loggerMap.get(name);
 			if (slogger == null)
 			{
-				if (truncatedName != null)
-				{
-					Log.i(AndroidLoggerFactory.class.getSimpleName(),
-						"Logger name " + name + " exceeds maximum length of " + TAG_MAX_LENGTH +
-						" characters, using " + truncatedName + " instead.");
-					slogger = new AndroidLogger(truncatedName);
-				}
-				else
-				{
-					slogger = new AndroidLogger(name);
-				}
-				loggerMap.put(name, slogger);
+				if (actualName != null) Log.i(AndroidLoggerFactory.class.getSimpleName(),
+					"Logger name " + name + " exceeds maximum length of " + TAG_MAX_LENGTH +
+					" characters, using " + actualName + " instead.");
+				else actualName = name;
+
+				slogger = new AndroidLogger(actualName);
+				loggerMap.put(actualName, slogger);
 			}
 		}
 		return slogger;
