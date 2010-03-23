@@ -31,6 +31,8 @@ import java.util.Map;
 
 import org.slf4j.ILoggerFactory;
 
+import android.util.Log;
+
 /**
  * An implementation of {@link ILoggerFactory} which always returns
  * {@link AndroidLogger} instances.
@@ -42,6 +44,10 @@ public class AndroidLoggerFactory implements ILoggerFactory
 {
 	private final Map<String, AndroidLogger> loggerMap;
 
+	private static final int TAG_MAX_LENGTH = 23; // tag names cannot be longer on Android platform
+                                                 // see also android/system/core/include/cutils/property.h
+                                                 // and android/frameworks/base/core/jni/android_util_Log.cpp
+
 	public AndroidLoggerFactory()
 	{
 		loggerMap = new HashMap<String, AndroidLogger>();
@@ -50,6 +56,14 @@ public class AndroidLoggerFactory implements ILoggerFactory
 	/* @see org.slf4j.ILoggerFactory#getLogger(java.lang.String) */
 	public AndroidLogger getLogger(final String name)
 	{
+		// fix for bug #173: trim tag length in case it exceeds maximum length
+		String truncatedName = null;
+		if (name != null && name.length() > TAG_MAX_LENGTH)
+		{
+			// remove the first part of the name, which usually is the least significant
+			truncatedName = name.substring(name.length() - TAG_MAX_LENGTH, name.length());
+		}
+
 		AndroidLogger slogger = null;
 		// protect against concurrent access of the loggerMap
 		synchronized (this)
@@ -57,7 +71,17 @@ public class AndroidLoggerFactory implements ILoggerFactory
 			slogger = loggerMap.get(name);
 			if (slogger == null)
 			{
-				slogger = new AndroidLogger(name);
+				if (truncatedName != null)
+				{
+					Log.i(AndroidLoggerFactory.class.getSimpleName(),
+						"Logger name " + name + " exceeds maximum length of " + TAG_MAX_LENGTH +
+						" characters, using " + truncatedName + " instead.");
+					slogger = new AndroidLogger(truncatedName);
+				}
+				else
+				{
+					slogger = new AndroidLogger(name);
+				}
 				loggerMap.put(name, slogger);
 			}
 		}
