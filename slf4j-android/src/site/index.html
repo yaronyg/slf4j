@@ -79,6 +79,13 @@ the Android platform implemented by the logger binding.</p>
 logging methods which have a Marker parameter simply delegate to the corresponding
 method without a Marker parameter, i.e., the Marker parameter is silently ignored.</p>
 
+<p>The maximum length of tag names on the Android platform is limited to 23 characters.
+This causes problems if a logger is created for a class whose fully qualified class name
+is longer. A <a href="http://bugzilla.slf4j.org/show_bug.cgi?id=173">ticket</a> has been
+created for this issue and it has been tentatively fixed in the source code repository.
+We are currently discussing how to best shorten tag names in order not to loose too much
+information.</p>
+
 <h3>Download</h3>
 <p>Binary: <a href="android/slf4j-android-1.5.8.jar">slf4j-android-1.5.8.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8.jar.sha1">sha1</a>]<br/>
 Source: <a href="android/slf4j-android-1.5.8-sources.jar">slf4j-android-1.5.8-sources.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8-sources.jar.sha1">sha1</a>]</p>
@@ -86,7 +93,7 @@ Source: <a href="android/slf4j-android-1.5.8-sources.jar">slf4j-android-1.5.8-so
 <h3>Source Repository</h3>
 <p>Sources are available read-only from the following Git repository, folder <tt>slf4j-android</tt>. This repository was cloned from the <a href="repos.html">main SLF4J Git repository</a>.</p>
 <table class="bodyTable" cellspacing="4" cellpadding="4">
-  	<tr class="a"><td>Web access</td><td>http://github.com/twwwt/slf4j</td></tr>
+  	<tr class="a"><td>Web access</td><td><a href="http://github.com/twwwt/slf4j">http://github.com/twwwt/slf4j</a></td></tr>
   	<tr class="alt"><td>git</td><td>git://github.com/twwwt/slf4j.git</td></tr>
   	<tr class="a"><td>http</td><td>http://github.com/twwwt/slf4j.git</td></tr>
 </table>
