@@ -22,7 +22,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 package org.slf4j.impl;
 
 import java.io.Serializable;
@@ -30,17 +29,20 @@ import java.io.Serializable;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
+import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
 /**
  * A wrapper over {@link org.apache.log4j.Logger org.apache.log4j.Logger} in
- * conforming to the {@link Logger} interface. 
+ * conforming to the {@link Logger} interface.
  * 
- * <p>Note that the logging levels mentioned in this class refer to those defined in the <a
- * href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Level.html"><code>org.apache.log4j.Level</code></a>
- * class.
+ * <p>
+ * Note that the logging levels mentioned in this class refer to those defined
+ * in the <a
+ * href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Level.html">
+ * <code>org.apache.log4j.Level</code></a> class.
  * 
  * <p>
  * The TRACE level was introduced in log4j version 1.2.12. In order to avoid
@@ -101,8 +103,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at level TRACE.
    * 
-   * @param msg -
-   *                the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void trace(String msg) {
     logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg, null);
@@ -118,14 +120,15 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg
-   *                the argument
+   *          the argument
    */
   public void trace(String format, Object arg) {
     if (isTraceEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg);
-      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, ft
+          .getMessage(), ft.getThrowable());
     }
   }
 
@@ -139,16 +142,17 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg1
-   *                the first argument
+   *          the first argument
    * @param arg2
-   *                the second argument
+   *          the second argument
    */
   public void trace(String format, Object arg1, Object arg2) {
     if (isTraceEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, ft
+          .getMessage(), ft.getThrowable());
     }
   }
 
@@ -162,14 +166,15 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param argArray
-   *                an array of arguments
+   *          an array of arguments
    */
   public void trace(String format, Object[] argArray) {
     if (isTraceEnabled()) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, ft
+          .getMessage(), ft.getThrowable());
     }
   }
 
@@ -177,9 +182,9 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * Log an exception (throwable) at level TRACE with an accompanying message.
    * 
    * @param msg
-   *                the message accompanying the exception
+   *          the message accompanying the exception
    * @param t
-   *                the exception (throwable) to log
+   *          the exception (throwable) to log
    */
   public void trace(String msg, Throwable t) {
     logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg, t);
@@ -197,8 +202,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at level DEBUG.
    * 
-   * @param msg -
-   *                the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void debug(String msg) {
     logger.log(FQCN, Level.DEBUG, msg, null);
@@ -214,14 +219,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg
-   *                the argument
+   *          the argument
    */
   public void debug(String format, Object arg) {
     if (logger.isDebugEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg);
-      logger.log(FQCN, Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      logger.log(FQCN, Level.DEBUG, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -235,16 +240,16 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg1
-   *                the first argument
+   *          the first argument
    * @param arg2
-   *                the second argument
+   *          the second argument
    */
   public void debug(String format, Object arg1, Object arg2) {
     if (logger.isDebugEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      logger.log(FQCN, Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      logger.log(FQCN, Level.DEBUG, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -258,14 +263,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param argArray
-   *                an array of arguments
+   *          an array of arguments
    */
   public void debug(String format, Object[] argArray) {
     if (logger.isDebugEnabled()) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      logger.log(FQCN, Level.DEBUG, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      logger.log(FQCN, Level.DEBUG, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -273,9 +278,9 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * Log an exception (throwable) at level DEBUG with an accompanying message.
    * 
    * @param msg
-   *                the message accompanying the exception
+   *          the message accompanying the exception
    * @param t
-   *                the exception (throwable) to log
+   *          the exception (throwable) to log
    */
   public void debug(String msg, Throwable t) {
     logger.log(FQCN, Level.DEBUG, msg, t);
@@ -293,8 +298,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the INFO level.
    * 
-   * @param msg -
-   *                the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void info(String msg) {
     logger.log(FQCN, Level.INFO, msg, null);
@@ -309,14 +314,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg
-   *                the argument
+   *          the argument
    */
   public void info(String format, Object arg) {
     if (logger.isInfoEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg);
-      logger.log(FQCN, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      logger.log(FQCN, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -330,16 +335,16 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg1
-   *                the first argument
+   *          the first argument
    * @param arg2
-   *                the second argument
+   *          the second argument
    */
   public void info(String format, Object arg1, Object arg2) {
     if (logger.isInfoEnabled()) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      logger.log(FQCN, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      logger.log(FQCN, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -353,14 +358,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param argArray
-   *                an array of arguments
+   *          an array of arguments
    */
   public void info(String format, Object[] argArray) {
     if (logger.isInfoEnabled()) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      logger.log(FQCN, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      logger.log(FQCN, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -369,9 +374,9 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * message.
    * 
    * @param msg
-   *                the message accompanying the exception
+   *          the message accompanying the exception
    * @param t
-   *                the exception (throwable) to log
+   *          the exception (throwable) to log
    */
   public void info(String msg, Throwable t) {
     logger.log(FQCN, Level.INFO, msg, t);
@@ -389,8 +394,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the WARN level.
    * 
-   * @param msg -
-   *                the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void warn(String msg) {
     logger.log(FQCN, Level.WARN, msg, null);
@@ -406,14 +411,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg
-   *                the argument
+   *          the argument
    */
   public void warn(String format, Object arg) {
     if (logger.isEnabledFor(Level.WARN)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      logger.log(FQCN, Level.WARN, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      logger.log(FQCN, Level.WARN, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -427,16 +432,16 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg1
-   *                the first argument
+   *          the first argument
    * @param arg2
-   *                the second argument
+   *          the second argument
    */
   public void warn(String format, Object arg1, Object arg2) {
     if (logger.isEnabledFor(Level.WARN)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      logger.log(FQCN, Level.WARN, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      logger.log(FQCN, Level.WARN, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -450,14 +455,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param argArray
-   *                an array of arguments
+   *          an array of arguments
    */
   public void warn(String format, Object[] argArray) {
     if (logger.isEnabledFor(Level.WARN)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      logger.log(FQCN, Level.WARN, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      logger.log(FQCN, Level.WARN, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -466,9 +471,9 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * message.
    * 
    * @param msg
-   *                the message accompanying the exception
+   *          the message accompanying the exception
    * @param t
-   *                the exception (throwable) to log
+   *          the exception (throwable) to log
    */
   public void warn(String msg, Throwable t) {
     logger.log(FQCN, Level.WARN, msg, t);
@@ -486,8 +491,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the ERROR level.
    * 
-   * @param msg -
-   *                the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void error(String msg) {
     logger.log(FQCN, Level.ERROR, msg, null);
@@ -503,14 +508,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg
-   *                the argument
+   *          the argument
    */
   public void error(String format, Object arg) {
     if (logger.isEnabledFor(Level.ERROR)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      logger.log(FQCN, Level.ERROR, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      logger.log(FQCN, Level.ERROR, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -524,16 +529,16 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param arg1
-   *                the first argument
+   *          the first argument
    * @param arg2
-   *                the second argument
+   *          the second argument
    */
   public void error(String format, Object arg1, Object arg2) {
     if (logger.isEnabledFor(Level.ERROR)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      logger.log(FQCN, Level.ERROR, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      logger.log(FQCN, Level.ERROR, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -547,14 +552,14 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * </p>
    * 
    * @param format
-   *                the format string
+   *          the format string
    * @param argArray
-   *                an array of arguments
+   *          an array of arguments
    */
   public void error(String format, Object[] argArray) {
     if (logger.isEnabledFor(Level.ERROR)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      logger.log(FQCN, Level.ERROR, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      logger.log(FQCN, Level.ERROR, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -563,16 +568,16 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * message.
    * 
    * @param msg
-   *                the message accompanying the exception
+   *          the message accompanying the exception
    * @param t
-   *                the exception (throwable) to log
+   *          the exception (throwable) to log
    */
   public void error(String msg, Throwable t) {
     logger.log(FQCN, Level.ERROR, msg, t);
   }
 
   public void log(Marker marker, String callerFQCN, int level, String msg,
-      Throwable t) {
+      Object[] argArray, Throwable t) {
     Level log4jLevel;
     switch (level) {
     case LocationAwareLogger.TRACE_INT:

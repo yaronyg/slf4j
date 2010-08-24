@@ -5,7 +5,7 @@
 
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-parent</artifactId>
-	<version>1.5.10-SNAPSHOT</version>
+	<version>1.6.1</version>
 
 	<packaging>pom</packaging>
 	<name>SLF4J</name>
@@ -27,7 +27,11 @@
   </licenses>
 
   <properties>
+    <slf4j.api.minimum.compatible.version>1.6.0</slf4j.api.minimum.compatible.version>
+    <cal10n.version>0.7.4</cal10n.version>
+    <log4j.version>1.2.16</log4j.version>
   </properties>
+
 
 	<modules>
 		<module>slf4j-api</module>
@@ -38,7 +42,6 @@
     <module>slf4j-jcl</module>
     <module>slf4j-ext</module>  
     <module>jcl-over-slf4j</module>
-    <module>jcl104-over-slf4j</module>
     <module>log4j-over-slf4j</module>
     <module>jul-to-slf4j</module>
     <module>integration</module>
@@ -74,13 +77,13 @@
       <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
-        <version>1.2.14</version>
+        <version>${log4j.version}</version>
       </dependency>
 
     <dependency>
       <groupId>ch.qos.cal10n</groupId>
       <artifactId>cal10n-api</artifactId>
-      <version>0.7</version>
+      <version>${cal10n.version}</version>
     </dependency>		
 
    </dependencies>
@@ -173,6 +176,20 @@
         </configuration>
       </plugin>
 
+
+      <!-- as suggested in http://bugzilla.slf4j.org/show_bug.cgi?id=152 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
 
 	</build>
@@ -229,6 +246,27 @@
         </pluginRepository>
       </pluginRepositories>
 
+    </profile>
+
+
+    <profile>
+      <id>javadocjar</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
@@ -301,12 +339,12 @@
 	<distributionManagement>
 		<site>
 			<id>pixie</id>
-			<url>scp://pixie/var/www/www.slf4j.org/htdocs/</url>
+			<url>scp://pixie.qos.ch/var/www/www.slf4j.org/htdocs/</url>
 		</site>
 
     <repository>
       <id>pixie</id>
-      <url>scp://pixie/var/mvnrepo/</url>
+      <url>scp://pixie.qos.ch/var/mvnrepo/</url>
     </repository>
 
 	</distributionManagement>

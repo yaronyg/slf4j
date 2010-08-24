@@ -38,6 +38,7 @@ import java.util.logging.LogRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.Marker;
+import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
@@ -77,8 +78,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at level FINEST.
    * 
-   * @param msg -
-   *          the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void trace(String msg) {
     if (logger.isLoggable(Level.FINEST)) {
@@ -102,8 +103,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void trace(String format, Object arg) {
     if (logger.isLoggable(Level.FINEST)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      log(SELF, Level.FINEST, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -125,8 +126,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void trace(String format, Object arg1, Object arg2) {
     if (logger.isLoggable(Level.FINEST)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      log(SELF, Level.FINEST, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -146,8 +147,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void trace(String format, Object[] argArray) {
     if (logger.isLoggable(Level.FINEST)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      log(SELF, Level.FINEST, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      log(SELF, Level.FINEST, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -177,8 +178,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at level FINE.
    * 
-   * @param msg -
-   *          the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void debug(String msg) {
     if (logger.isLoggable(Level.FINE)) {
@@ -201,8 +202,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void debug(String format, Object arg) {
     if (logger.isLoggable(Level.FINE)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      log(SELF, Level.FINE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -224,8 +225,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void debug(String format, Object arg1, Object arg2) {
     if (logger.isLoggable(Level.FINE)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      log(SELF, Level.FINE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -245,8 +246,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void debug(String format, Object[] argArray) {
     if (logger.isLoggable(Level.FINE)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      log(SELF, Level.FINE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -276,8 +277,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the INFO level.
    * 
-   * @param msg -
-   *          the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void info(String msg) {
     if (logger.isLoggable(Level.INFO)) {
@@ -300,8 +301,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void info(String format, Object arg) {
     if (logger.isLoggable(Level.INFO)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      log(SELF, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -323,8 +324,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void info(String format, Object arg1, Object arg2) {
     if (logger.isLoggable(Level.INFO)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      log(SELF, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -344,8 +345,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void info(String format, Object[] argArray) {
     if (logger.isLoggable(Level.INFO)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      log(SELF, Level.INFO, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      log(SELF, Level.INFO, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -377,8 +378,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the WARNING level.
    * 
-   * @param msg -
-   *          the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void warn(String msg) {
     if (logger.isLoggable(Level.WARNING)) {
@@ -402,8 +403,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void warn(String format, Object arg) {
     if (logger.isLoggable(Level.WARNING)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      log(SELF, Level.WARNING, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -425,8 +426,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void warn(String format, Object arg1, Object arg2) {
     if (logger.isLoggable(Level.WARNING)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      log(SELF, Level.WARNING, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -446,8 +447,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void warn(String format, Object[] argArray) {
     if (logger.isLoggable(Level.WARNING)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      log(SELF, Level.WARNING, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      log(SELF, Level.WARNING, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -478,8 +479,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message object at the SEVERE level.
    * 
-   * @param msg -
-   *          the message object to be logged
+   * @param msg
+   *          - the message object to be logged
    */
   public void error(String msg) {
     if (logger.isLoggable(Level.SEVERE)) {
@@ -503,8 +504,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void error(String format, Object arg) {
     if (logger.isLoggable(Level.SEVERE)) {
-      String msgStr = MessageFormatter.format(format, arg);
-      log(SELF, Level.SEVERE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg);
+      log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -526,8 +527,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void error(String format, Object arg1, Object arg2) {
     if (logger.isLoggable(Level.SEVERE)) {
-      String msgStr = MessageFormatter.format(format, arg1, arg2);
-      log(SELF, Level.SEVERE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+      log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -547,8 +548,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public void error(String format, Object[] argArray) {
     if (logger.isLoggable(Level.SEVERE)) {
-      String msgStr = MessageFormatter.arrayFormat(format, argArray);
-      log(SELF, Level.SEVERE, msgStr, null);
+      FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
+      log(SELF, Level.SEVERE, ft.getMessage(), ft.getThrowable());
     }
   }
 
@@ -626,9 +627,9 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
       record.setSourceMethodName(ste.getMethodName());
     }
   }
- 
+
   public void log(Marker marker, String callerFQCN, int level, String message,
-      Throwable t) {
+      Object[] argArray, Throwable t) {
     Level julLevel;
     switch (level) {
     case LocationAwareLogger.TRACE_INT:
@@ -650,12 +651,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
       throw new IllegalStateException("Level number " + level
           + " is not recognized.");
     }
-    // the logger.isLoggable check avoids the unconditional 
+    // the logger.isLoggable check avoids the unconditional
     // construction of location data for disabled log
-    // statements. As of 2008-07-31, callers of this method 
-    // do not perform this check. See also 
+    // statements. As of 2008-07-31, callers of this method
+    // do not perform this check. See also
     // http://bugzilla.slf4j.org/show_bug.cgi?id=90
-    if(logger.isLoggable(julLevel)) {
+    if (logger.isLoggable(julLevel)) {
       log(callerFQCN, julLevel, message, t);
     }
   }

@@ -74,7 +74,7 @@ h2 {
 }
 
 h3 {
-  padding-top:10px; 
+  padding-top: 5px; 
   background-color: transparent;
   font-weight: normal;
   font-size: large;
@@ -238,7 +238,7 @@ code {
 }
 
 .highlight {
-   width: 300px;
+  width: 300px;
   float: right;	
   display: inline;
   font-weight: bolder;
@@ -251,7 +251,15 @@ code {
   margin-right: 3em;
 }
 
+.survey { 
+  font-weight: bolder;
+  font-size: larger;  
 
+  border:1px solid #cccccc;
+  background:#FFCC99;	
+  padding-left: 1ex;
+  padding-right: 1ex; 
+}
 /* ========== body table ============ */
 table.bodyTable {
 	padding: 0px;
@@ -295,3 +303,4 @@ table.bodyTable tr.alt {
 }
 
 /* EOF =============== bodyTable =============== */
+
