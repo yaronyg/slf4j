@@ -73,22 +73,41 @@ the Android platform implemented by the logger binding.</p>
   	<tr class="a"><td>ERROR</td><td>ERROR</td></tr>
 </table>
 
+<h3>Logger name mapping</h3>
+<p>Recap, <tt>Logger</tt> instances created using the <tt>LoggerFactory</tt> are named
+either according to the name given as parameter, or the fully qualified class name
+of the class given as paramenter. Each logger name will be used as the log message
+tag on the Android platform. However, the length of such tags is currently limited
+to 23 characters (23 = 32 - 8 for namespace prefix - 1 for C terminator). If the
+fully qualified class name (or the name given as parameter at creation time)
+exceeds this limit then it will be truncated by the <tt>LoggerFactory</tt> and the
+new Logger will have the truncated name. The following examples illustrate this.</p>
+<table class="bodyTable" cellspacing="4" cellpadding="4" width="300">
+  	<tr><th align="left"><b>Original Name<b></th><th align="left"><b>Truncated Name</b></th></tr>
+  	<tr class="a"><td>org.example.project.MyClass</td><td>o*.e*.p*.MyClass</td></tr>
+  	<tr class="alt"><td>org.example.project.subproject.MyClass</td><td>o*.e*.p*.s*.MyClass</td></tr>
+  	<tr class="a"><td>org.example.MyQuiteLongNamedClassOfTooMuchCharacters</td><td>o*.e*.MyQuiteLongNamed*</td></tr>
+  	<tr class="alt"><td>o.e.project.subproject.MyClass</td><td>o.e.p*.s*.MyClass</td></tr>
+  	<tr class="a"><td>MyQuiteLongNamedClassNotInAPackage</td><td>MyQuiteLongNamedClassN*</td></tr>
+</table>
+
 <h3>Limitations</h3>
 <p>The Android binding implementation currently does not support
 <a href="http://www.slf4j.org/apidocs/org/slf4j/Marker.html">Markers</a>. All
 logging methods which have a Marker parameter simply delegate to the corresponding
 method without a Marker parameter, i.e., the Marker parameter is silently ignored.</p>
 
-<p>The maximum length of tag names on the Android platform is limited to 23 characters.
-This causes problems if a logger is created for a class whose fully qualified class name
-is longer. A <a href="http://bugzilla.slf4j.org/show_bug.cgi?id=173">ticket</a> has been
-created for this issue and it has been tentatively fixed in the source code repository.
-We are currently discussing how to best shorten tag names in order not to loose too much
-information.</p>
-
 <h3>Download</h3>
+<h5>Release Candidate</h5>
+<p>Binary: <a href="android/slf4j-android-1.6.1-RC1.jar">slf4j-android-1.6.1-RC1.jar</a>&nbsp;[<a href="android/slf4j-android-1.6.1-RC1.jar.sha1">sha1</a>]<br/>
+Source: <a href="android/slf4j-android-1.6.1-RC1-sources.jar">slf4j-android-1.6.1-RC1-sources.jar</a>&nbsp;[<a href="android/slf4j-android-1.6.1-RC1-sources.jar.sha1">sha1</a>]</p>
+
+<h5>Previous Version</h5>
 <p>Binary: <a href="android/slf4j-android-1.5.8.jar">slf4j-android-1.5.8.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8.jar.sha1">sha1</a>]<br/>
-Source: <a href="android/slf4j-android-1.5.8-sources.jar">slf4j-android-1.5.8-sources.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8-sources.jar.sha1">sha1</a>]</p>
+Source: <a href="android/slf4j-android-1.5.8-sources.jar">slf4j-android-1.5.8-sources.jar</a>&nbsp;[<a href="android/slf4j-android-1.5.8-sources.jar.sha1">sha1</a>]<br/>
+Note that in version 1.5.8 logger names must not be longer than 23 characters, see
+<a href="http://bugzilla.slf4j.org/show_bug.cgi?id=173">issue 173</a>.
+</p>
 
 <h3>Source Repository</h3>
 <p>Sources are available read-only from the following Git repository, folder <tt>slf4j-android</tt>. This repository was cloned from the <a href="repos.html">main SLF4J Git repository</a>.</p>
