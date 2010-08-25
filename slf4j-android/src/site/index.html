@@ -74,14 +74,15 @@ the Android platform implemented by the logger binding.</p>
 </table>
 
 <h3>Logger name mapping</h3>
-<p>Recap, <tt>Logger</tt> instances created using the <tt>LoggerFactory</tt> are named
-either according to the name given as parameter, or the fully qualified class name
-of the class given as paramenter. Each logger name will be used as the log message
-tag on the Android platform. However, the length of such tags is currently limited
-to 23 characters (23 = 32 - 8 for namespace prefix - 1 for C terminator). If the
-fully qualified class name (or the name given as parameter at creation time)
-exceeds this limit then it will be truncated by the <tt>LoggerFactory</tt> and the
-new Logger will have the truncated name. The following examples illustrate this.</p>
+<p>Recap, <tt>Logger</tt> instances created using the <tt>LoggerFactory</tt> are
+named either according to the name given as parameter, or the fully qualified class
+name of the class given as paramenter. Each logger name will be used as the log
+message tag on the Android platform. However, the length of such tags is currently
+limited to 23 characters (23 = 32 - 8 for namespace prefix - 1 for C terminator).
+Starting from version 1.6.1, if the fully qualified class name (or the name given
+as parameter at creation time) exceeds this limit then it will be truncated by the
+<tt>LoggerFactory</tt> and the new Logger will have the truncated name.
+The following examples illustrate this.</p>
 <table class="bodyTable" cellspacing="4" cellpadding="4" width="300">
   	<tr><th align="left"><b>Original Name<b></th><th align="left"><b>Truncated Name</b></th></tr>
   	<tr class="a"><td>org.example.project.MyClass</td><td>o*.e*.p*.MyClass</td></tr>
