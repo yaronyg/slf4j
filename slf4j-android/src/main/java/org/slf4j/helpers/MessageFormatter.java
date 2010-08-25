@@ -24,14 +24,16 @@
 
 package org.slf4j.helpers;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 // contributors: lizongbo: proposed special treatment of array parameter values
-// Jörn Huxhorn: pointed out double[] omission, suggested deep array copy
+// Jï¿½rn Huxhorn: pointed out double[] omission, suggested deep array copy
 /**
  * Formats messages according to very simple substitution rules. Substitutions
  * can be made 1, 2 or more arguments.
+ * 
  * <p>
  * For example,
  * 
@@ -41,9 +43,9 @@ import java.util.Map;
  * 
  * will return the string "Hi there.".
  * <p>
- * The {} pair is called the <em>formatting anchor</em>. It serves to
- * designate the location where arguments need to be substituted within the
- * message pattern.
+ * The {} pair is called the <em>formatting anchor</em>. It serves to designate
+ * the location where arguments need to be substituted within the message
+ * pattern.
  * <p>
  * In case your message contains the '{' or the '}' character, you do not have
  * to do anything special unless the '}' character immediately follows '{'. For
@@ -79,10 +81,19 @@ import java.util.Map;
  * will return the string "File name is C:\file.zip".
  * 
  * <p>
- * See {@link #format(String, Object)}, {@link #format(String, Object, Object)}
- * and {@link #arrayFormat(String, Object[])} methods for more details.
+ * The formatting conventions are different than those of {@link MessageFormat}
+ * which ships with the Java platform. This is justified by the fact that
+ * SLF4J's implementation is 10 times faster than that of {@link MessageFormat}.
+ * This local performance difference is both measurable and significant in the
+ * larger context of the complete logging processing chain.
+ * 
+ * <p>
+ * See also {@link #format(String, Object)},
+ * {@link #format(String, Object, Object)} and
+ * {@link #arrayFormat(String, Object[])} methods for more details.
  * 
  * @author Ceki G&uuml;lc&uuml;
+ * @author Joern Huxhorn
  */
 final public class MessageFormatter {
   static final char DELIM_START = '{';
@@ -104,13 +115,12 @@ final public class MessageFormatter {
    * <p>
    * 
    * @param messagePattern
-   *                The message pattern which will be parsed and formatted
+   *          The message pattern which will be parsed and formatted
    * @param argument
-   *                The argument to be substituted in place of the formatting
-   *                anchor
+   *          The argument to be substituted in place of the formatting anchor
    * @return The formatted message
    */
-  final public static String format(String messagePattern, Object arg) {
+  final public static FormattingTuple format(String messagePattern, Object arg) {
     return arrayFormat(messagePattern, new Object[] { arg });
   }
 
@@ -128,18 +138,30 @@ final public class MessageFormatter {
    * will return the string "Hi Alice. My name is Bob.".
    * 
    * @param messagePattern
-   *                The message pattern which will be parsed and formatted
+   *          The message pattern which will be parsed and formatted
    * @param arg1
-   *                The argument to be substituted in place of the first
-   *                formatting anchor
+   *          The argument to be substituted in place of the first formatting
+   *          anchor
    * @param arg2
-   *                The argument to be substituted in place of the second
-   *                formatting anchor
+   *          The argument to be substituted in place of the second formatting
+   *          anchor
    * @return The formatted message
    */
-  final public static String format(final String messagePattern, Object arg1,
-      Object arg2) {
+  final public static FormattingTuple format(final String messagePattern,
+      Object arg1, Object arg2) {
     return arrayFormat(messagePattern, new Object[] { arg1, arg2 });
+  }
+
+  static final Throwable getThrowableCandidate(Object[] argArray) {
+    if (argArray == null || argArray.length == 0) {
+      return null;
+    }
+
+    final Object lastEntry = argArray[argArray.length - 1];
+    if (lastEntry instanceof Throwable) {
+      return (Throwable) lastEntry;
+    }
+    return null;
   }
 
   /**
@@ -148,36 +170,44 @@ final public class MessageFormatter {
    * arguments can be passed in an array.
    * 
    * @param messagePattern
-   *                The message pattern which will be parsed and formatted
+   *          The message pattern which will be parsed and formatted
    * @param argArray
-   *                An array of arguments to be substituted in place of
-   *                formatting anchors
+   *          An array of arguments to be substituted in place of formatting
+   *          anchors
    * @return The formatted message
    */
-  final public static String arrayFormat(final String messagePattern,
+  final public static FormattingTuple arrayFormat(final String messagePattern,
       final Object[] argArray) {
+
+    Throwable throwableCandidate = getThrowableCandidate(argArray);
+
     if (messagePattern == null) {
-      return null;
+      return new FormattingTuple(null, argArray, throwableCandidate);
     }
+
     if (argArray == null) {
-      return messagePattern;
+      return new FormattingTuple(messagePattern);
     }
+
     int i = 0;
     int j;
     StringBuffer sbuf = new StringBuffer(messagePattern.length() + 50);
 
-    for (int L = 0; L < argArray.length; L++) {
+    int L;
+    for (L = 0; L < argArray.length; L++) {
 
       j = messagePattern.indexOf(DELIM_STR, i);
 
       if (j == -1) {
         // no more variables
         if (i == 0) { // this is a simple string
-          return messagePattern;
+          return new FormattingTuple(messagePattern, argArray,
+              throwableCandidate);
         } else { // add the tail string which contains no variables and return
           // the result.
           sbuf.append(messagePattern.substring(i, messagePattern.length()));
-          return sbuf.toString();
+          return new FormattingTuple(sbuf.toString(), argArray,
+              throwableCandidate);
         }
       } else {
         if (isEscapedDelimeter(messagePattern, j)) {
@@ -204,7 +234,11 @@ final public class MessageFormatter {
     }
     // append the characters following the last {} pair.
     sbuf.append(messagePattern.substring(i, messagePattern.length()));
-    return sbuf.toString();
+    if (L < argArray.length - 1) {
+      return new FormattingTuple(sbuf.toString(), argArray, throwableCandidate);
+    } else {
+      return new FormattingTuple(sbuf.toString(), argArray, null);
+    }
   }
 
   final static boolean isEscapedDelimeter(String messagePattern,
@@ -269,8 +303,10 @@ final public class MessageFormatter {
     try {
       String oAsString = o.toString();
       sbuf.append(oAsString);
-    } catch( Throwable t) {
-      System.err.println("SLF4J: Failed toString() invocation on an object of type ["+o.getClass().getName()+"]");
+    } catch (Throwable t) {
+      System.err
+          .println("SLF4J: Failed toString() invocation on an object of type ["
+              + o.getClass().getName() + "]");
       t.printStackTrace();
       sbuf.append("[FAILED toString()]");
     }

@@ -5,7 +5,7 @@
    Version:     $Id:$
    Author:      Thorsten Möller - University of Basel Switzerland
 
-   Copyright (c) 2009 SLF4J.ORG
+   Copyright (c) 2009, 2010 SLF4J.ORG
 
    All rights reserved.
 
@@ -42,17 +42,29 @@
 <!--		<version>1.5.8</version>-->
 <!--	</parent>-->
 
+<!-- Yet another general note: This project doesn't use the Android Maven Plugin
+     on purpose. The reason is that this project is a library (to be used by
+     Android applications) but it is not an Android application itself. That's
+     why we stick to packaging type 'jar' (instead of 'apk'). Except for the
+     dependency to the Android JAR it remains a standard Java project. Note that
+     we also use standard JUnit dependency rather than the classes packaged in
+     the Android JAR. -->
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-android</artifactId>
-	<version>1.5.8</version>
+	<version>1.6.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SLF4J API and Google Android Binding</name>
 
 	<inceptionYear>2009</inceptionYear>
 	<url>http://www.slf4j.org/android</url>
 	<description>SLF4J API and Google Android binding</description>
+
+	<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
 	<licenses>
 		<license>
@@ -79,11 +91,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>android</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<version>1.5</version>
-			<scope>system</scope>
-			<systemPath>${env.ANDROID_HOME}/platforms/android-1.5/android.jar</systemPath>
+			<version>1.5_r4</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -102,7 +113,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>

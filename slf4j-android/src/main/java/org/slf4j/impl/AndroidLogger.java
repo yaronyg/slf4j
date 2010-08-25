@@ -256,7 +256,7 @@ public class AndroidLogger extends MarkerIgnoringBase
 	 */
 	private String format(final String format, final Object arg1, final Object arg2)
 	{
-		return MessageFormatter.format(format, arg1, arg2);
+		return MessageFormatter.format(format, arg1, arg2).getMessage();
 	}
 
 	/**
@@ -267,6 +267,6 @@ public class AndroidLogger extends MarkerIgnoringBase
 	 */
 	private String format(final String format, final Object[] args)
 	{
-		return MessageFormatter.arrayFormat(format, args);
+		return MessageFormatter.arrayFormat(format, args).getMessage();
 	}
 }
