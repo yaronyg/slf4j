@@ -88,7 +88,7 @@
 
     <h3>
       <a name="StaticLoggerBinder" href="#StaticLoggerBinder">
-        Failed to load class
+        Failedto load class
         <code>org.slf4j.impl.StaticLoggerBinder</code>
       </a>
     </h3>
@@ -160,8 +160,45 @@
     to use the nop (no-operation) binding, then remove
     <em>slf4j-simple-${version}.jar</em> from the class path.</p>
 
+    <p>Note that the warning emitted by SLF4J is just that, a
+    warning. SLF4J will still bind with the first framework it finds
+    on the class path.
+    </p>
 
     <!-- ====================================================== -->
+    <h3><a name="version_mismatch" href="#version_mismatch">slf4j-api
+    version does not match that of the binding</a></h3>
+
+    <p>An SLF4J binding designates an artifact such as
+    <em>slf4j-jdk14.jar</em> or <em>slf4j-log4j12.jar</em> used to
+    <em>bind</em> slf4j to an underlying logging framework, say,
+    java.util.logging or log4j.
+    </p>
+
+    <p>Mixing mixing different versions of <em>slf4j-api.jar</em> and
+    SLF4J binding can cause problems. For example, if you are using
+    slf4j-api-${project.version}.jar, then you should also use
+    slf4j-simple-${project.version}.jar, using slf4j-simple-1.5.5.jar
+    will not work.</p>
+
+    <p>It should be noted that from the client's perspective all
+    versions of slf4j-api are compatible. Client code compiled with
+    <em>slf4j-api-N.jar</em> will run perfectly fine with
+    <em>slf4j-api-M.jar</em> for any N and M. You only need to ensure
+    that the version of your binding matches that of the
+    slf4j-api.jar. You do not have to worry about the version of
+    slf4j-api.jar used by a given dependendency in your project. You
+    can always use any version of <em>slf4j-api.jar</em>, and as long
+    as the version of <em>slf4j-api.jar</em> and its binding match,
+    you should be fine.
+    </p>
+
+    <p>At initialization time, if SLF4J suspects that there may be a
+    api vs. binding version mismatch problem, it will emit a warning
+    about the suspected mismatch.
+    </p>
+
+
     <h3>
       <a name="null_LF" href="#null_LF">Logging factory implementation
       cannot be null</a>
@@ -314,28 +351,6 @@
     <code>Log4jLoggerAdapter</code> will map the TRACE level as
     DEBUG.</p>
     
-
-
-    <h3><a name="version_mismatch" href="#version_mismatch">slf4j-api
-    version does not match that of the binding</a></h3>
-
-    <p>Mixing mixing different versions of slf4j artifacts can cause
-    problems. For example, if you are using
-    slf4j-api-${project.version}.jar, then you should also use
-    slf4j-simple-${project.version}.jar, using slf4j-simple-1.5.5.jar
-    will not work.
-    </p>
-
-    <p class="red">In general, you should make sure that the
-    slf4j-api version matches that of the slf4j binding.
-    </p>
-
-    <p>At initialization time, if SLF4J suspects that there may be a
-    version mismatch problem, it will emit a warning about the
-    suspected mismatch. For the exact details of the version mismatch
-    detection mechanism, please refer to the <a
-    href="faq.html#version_checks">relevant entry</a> in the FAQ.
-    </p>
 
     <h3><a name="substituteLogger" href="#substituteLogger">Substitute
     loggers were created during the default configuration phase of the

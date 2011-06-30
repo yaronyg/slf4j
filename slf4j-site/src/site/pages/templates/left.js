@@ -32,8 +32,6 @@ document.write('  </p>');
 
 document.write('</div>');
 
-document.write('<p>&nbsp;</p>');
-document.write('<p class="survey">Take our <a href="http://ceki.questionform.com/public/slf4j">two question survey</a>.</p>');
 
 document.write('<p>&nbsp;</p>');
 document.write('<p class="pub">');

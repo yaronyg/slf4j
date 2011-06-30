@@ -29,11 +29,17 @@
   <p>The Simple Logging Facade for Java or (SLF4J) serves as a simple
   facade or abstraction for various logging frameworks, e.g.
   java.util.logging, log4j and logback, allowing the end user to plug
-  in the desired logging framework at <em>deployment</em> time.
-  </p>
+  in the desired logging framework at <em>deployment</em>
+  time. </p>
 
   <p>Before you start using SLF4J, we highly recommend that you read
   the two-page <a href="manual.html">SLF4J user manual</a>. 
+  </p>
+
+  <p>Note that SLF4J-enabling your library implies the addition of
+  only a single mandatory dependency, namely <em>slf4j-api.jar</em>.
+  If no binding is found on the class path, then SLF4J will default to
+  a no-operation implementation.
   </p>
 
   <p>In case you wish to migrate your Java source files to SLF4J,
@@ -42,7 +48,7 @@
 
   <p>In case an externally-maintained component you depend on uses a
   logging API other than SLF4J, such as commons logging, log4j or
-  j.u.l, have a look at SLF4J's binary-support for <a
+  java.util.logging, have a look at SLF4J's binary-support for <a
   href="legacy.html">legacy APIs</a>.
   </p>
 
@@ -56,7 +62,9 @@
     <tr>
       <td valign="top">
         <ul>
+          <li><a href="http://activemq.apache.org/">Apache ActiveMQ</a></li>
           <li><a href="http://arhiva.apache.org/">Apache Archiva</a></li>
+          <li><a href="http://camel.apache.org/">Apache Camel</a></li>
           <li><a href="http://directory.apache.org/">Apache Directory</a></li>
           <li><a href="http://mina.apache.org/ftpserver/">Apache FTPServer</a></li>
           <li><a href="http://geronimo.apache.org/">Apache Geronimo</a></li>
@@ -64,13 +72,14 @@
           <li><a href="http://jackrabbit.apache.org/">Apache Jackrabbit</a></li>
           <li><a href="http://mina.apache.org/">Apache Mina</a></li>
           <li><a href="http://cwiki.apache.org/qpid/">Apache Qpid</a></li>
-          <li><a href="http://incubator.apache.org/sling/site/index.html">Apache Sling</a></li>
-          <li><a href="http://lucene.apache.org/solr/">Apache Solr</a></li>
+          <li><a href="http://servicemix.apache.org/">Apache ServiceMix</a></li>
         </ul>
       </td>
  
       <td valign="top">
         <ul>
+          <li><a href="http://incubator.apache.org/sling/site/index.html">Apache Sling</a></li>
+          <li><a href="http://lucene.apache.org/solr/">Apache Solr</a></li>
           <li><a href="http://tapestry.apache.org/">Apache Tapestry</a></li>
           <li><a href="http://incubator.apache.org/wicket/">Apache Wicket</a></li>
           <li><a href="http://aperture.sourceforge.net/">Aperture</a></li>
@@ -80,14 +89,14 @@
           <li><a href="http://www.bitronix.be/">Bitronix</a></li>
           <li><a href="http://www.dbunit.org/">DbUnit</a></li>
           <li><a href="http://displaytag.sourceforge.net/11/">Display tag</a></li>
-          <li><a href="http://ehcache.org/">Ehcache</a></li>
-          <li><a href="http://groovy.codehaus.org/GMaven">GMaven</a></li>
+
         </ul>
  
       </td>
  
       <td valign="top">
         <ul>
+          <li><a href="http://ehcache.org/">Ehcache</a></li>
           <li><a href="http://www.gradle.org/">Gradle</a></li>
           <li><a href="http://www.icegreen.com/greenmail/">GreenMail</a></li>
           <li><a href="http://gumtree.codehaus.org/">GumTree</a></li>
@@ -106,6 +115,7 @@
  
       <td valign="top">
         <ul>
+          <li><a href="http://groovy.codehaus.org/GMaven">GMaven</a></li>
           <li><a href="http://code.google.com/p/jmesa/">JMesa</a></li>
           <li><a href="http://www.artofsolving.com/opensource/jodconverter">JODConverter</a></li>
           <li><a href="http://jtrac.info/dependencies.html">JTrac</a></li>
