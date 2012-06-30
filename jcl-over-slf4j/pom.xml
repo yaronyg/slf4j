@@ -1,22 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<parent>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-parent</artifactId>
-    <version>1.6.2-SNAPSHOT</version>
-	</parent>
-	
-	<modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-parent</artifactId>
+    <version>1.6.7-SNAPSHOT</version>
+  </parent>
 
-	<groupId>org.slf4j</groupId>
-	<artifactId>jcl-over-slf4j</artifactId>
-	<packaging>jar</packaging>
-	<name>JCL 1.1.1 implemented over SLF4J</name>
+  <modelVersion>4.0.0</modelVersion>
 
-	<url>http://www.slf4j.org</url>
-	<description>
-		JCL 1.1.1 implementation over SLF4J
-	</description>
+  <groupId>org.slf4j</groupId>
+  <artifactId>jcl-over-slf4j</artifactId>
+  <packaging>jar</packaging>
+  <name>JCL 1.1.1 implemented over SLF4J</name>
+  <description>JCL 1.1.1 implemented over SLF4J</description>
+  <url>http://www.slf4j.org</url>
+
 
   <dependencies>
     <!--
@@ -38,11 +37,11 @@
       <artifactId>slf4j-jdk14</artifactId>
       <scope>test</scope>
     </dependency>
-   
+
   </dependencies>
 
   <build>
-    <plugins>		
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -55,7 +54,7 @@
             </manifestEntries>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
           </archive>
-        </configuration>			
+        </configuration>
       </plugin>
     </plugins>
   </build>

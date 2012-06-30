@@ -29,6 +29,114 @@
 
    <hr noshade="noshade" size="1"/>
 
+   <h3>2012 - Release of SLF4J 1.6.7</h3>
+
+   <p>The logger field (of type <code>java.util.logging.Logger</code>)
+   in <code>JDK14LoggerAdapter</code> is now marked as transient. This
+   fixes <a href="http://bugzilla.slf4j.org/show_bug.cgi?id=261">bug
+   #261</a>, a serialization problem reported by Thorbj&oslash;rn Ravn
+   Andersen.</p>
+
+   <hr noshade="noshade" size="1"/>
+
+   <h3>11th of June, 2012 - Release of SLF4J 1.6.6</h3>
+
+   <p>Source repository has been moved to <a
+   href="https://github.com/qos-ch/slf4j">https://github.com/qos-ch/slf4j</a>
+   on github.</p>
+ 
+   <p>In case multiple bindings are found on the class path, SLF4J
+   will now output the name of the framework/implementation class it
+   binds with.</p>
+
+   <p><a
+   href="apidocs/org/slf4j/impl/SimpleLogger.html">SimpleLogger</a>
+   now supports configuration properties. </p>
+
+   <p>LoggerWrapper in the slf4j-ext module now correctly deals with
+   markers. This fixes <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=265">bug #265</a>
+   reported by Dario Campagna.</p>
+
+   <p>The log4j-over-slf4j module now supports legacy projects
+   providing their own log4j <code>LoggerFactory</code>. This fixes <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=234">bug #234</a>
+   reported by Laurent Pellegrino with Piotr Jagielski providing the
+   appropriate patch.</p>
+
+   <h3>4th of June, 2012 - Release of SLF4J 1.6.5</h3>
+
+   <p>In the slf4j-log4j12 module, upgraded the log4j dependency to
+   version 1.2.17.</p>
+
+   <p>Added removeHandlersForRootLogger() method to <code><a
+   href="apidocs/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a></code>
+   class.</p>
+
+   <p>The log4j-over-slf4j module now exports all its packages in its
+   manifest. This issue was reported in <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=262">262</a> by
+   Mikhail Mazursky who also provided the relevant patch.
+   </p>
+
+   <h3>October 31st, 2011 - Release of SLF4J 1.6.4</h3>
+
+   <p>Fixed in thread-safety issues in <code>BasicMDCAdapter</code>
+   fixing <a href="http://bugzilla.slf4j.org/show_bug.cgi?id=203">bug
+   #203</a> and <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=224">bug
+   #224</a>. Note that <code>BasicMDCAdapter</code> is only used with
+   the slf4j-jdk14.jar binding.
+   </p>
+
+   <p><code>BasicMDCAdapter</code> invoked a method introduced in JDK
+   1.5 preventing it from running under JDK 1.4. Interestingly enough,
+   this issue has never been reported by the user community.</p>
+
+   <h3>October 17th, 2011 - Release of SLF4J 1.6.3</h3>
+
+   <p><code>LogEvent</code> class in slf4j-ext module now correctly
+   passes the event data as a parameter object. This fixes <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=246">bug #246</a>
+   reported by Ralph Goers.
+   </p>
+
+   <p>Added missing OSGi manifest to the jul-to-slf4j module. This
+   fixes <a href="http://bugzilla.slf4j.org/show_bug.cgi?id=166">bug
+   #166</a> reported by Ekkehard Gentz. </p>
+
+   <p>In the log4j-over-slf4j module, added missing
+   <code>getAllAppenders</code>() method in <code>Category</code>
+   class. This fixes <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=235">bug #235</a>
+   reported by Anthony Whitford.
+   </p>
+
+   <h3>August 19th, 2011 - Release of SLF4J 1.6.2</h3>
+
+   <p>Fixed <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=138">bug
+   #138</a>. SLF4J will no longer complain about multiple SLF4J
+   bindings when running under a Weblogic server.
+   </p>
+
+   <p>Fixed <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=228">bug
+   #228</a>. When running under IBM's JDK, and if no binding can be
+   found, SLF4J will no longer throw a
+   <code>NoClassDefFoundError</code>. Instead, it will default to an
+   NOP implementation. Under the same circumstances but with Sun's
+   JDK, SLF4J already defaulted to an NOP implementation since release
+   1.6.0.</p>
+
+   <p>Added certain missing classes to the log4j-over-slf4j module as
+   requested in <a
+   href="http://bugzilla.slf4j.org/show_bug.cgi?id=225">bug 225</a> by
+   Josh Stewart.
+   </p>
+
+   <hr noshade="noshade" size="1"/>
+
    <h3>July 5th, 2010 - Release of SLF4J 1.6.1</h3>
 
    <p>Updated log4j dependency to version 1.2.16 and <a

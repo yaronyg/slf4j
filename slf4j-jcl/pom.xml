@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-parent</artifactId>
-		<version>1.6.2-SNAPSHOT</version>
+		<version>1.6.7-SNAPSHOT</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
@@ -12,12 +12,10 @@
 	<artifactId>slf4j-jcl</artifactId>
 	<packaging>jar</packaging>
 	<name>SLF4J JCL Binding</name>
+  <description>SLF4J JCL Binding</description>
 
 	<url>http://www.slf4j.org</url>
 
-	<description>
-		The slf4j jcl binding
-	</description>
 
   <dependencies>
     <dependency>
