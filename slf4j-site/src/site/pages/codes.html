@@ -5,12 +5,21 @@
   <title>SLF4J Error Codes</title>
   <link rel="stylesheet" type="text/css" media="screen" href="css/site.css" />
   <link rel="stylesheet" type="text/css" href="css/prettify.css" />
+
+  <style>
+    h3.doAnchor {
+      border-top: 2px solid #888;
+      padding-top: 1ex;
+    }
+  </style>
 </head>
-<body onload="prettyPrint()">
+<body onload="prettyPrint(); decorate();">
     <script type="text/javascript" src="js/prettify.js"></script>
     <script type="text/javascript">prefix='';</script>
+    <script type="text/javascript" src="templates/header.js"></script>
+    <script type="text/javascript" src="js/jquery-min.js"></script>
+    <script type="text/javascript" src="js/decorator.js"></script>
 
-    <script src="templates/header.js" type="text/javascript"></script>
     <div id="left">
       <script src="templates/left.js" type="text/javascript"></script>
     </div>
@@ -24,12 +33,9 @@
     </center>
     
 
-    <h3>
-      <a name="release" href="#release">
-        The method
-        <code>o.a.commons.logging.impl.SLF4FLogFactory#release</code>
-        was invoked.
-      </a>
+    <h3 class="doAnchor" name="release">The method
+    <code>o.a.commons.logging.impl.SLF4FLogFactory#release</code> was
+    invoked.      
     </h3>
 
     <p>Given the structure of the commons-logging API, in particular
@@ -60,10 +66,9 @@
     
      <!-- ====================================================== -->
 
-    <h3>
-      <a name="unsupported_operation_in_jcl_over_slf4j" href="#unsupported_operation_in_jcl_over_slf4j">
-        Operation [suchAndSuch] is not supported in jcl-over-slf4j.
-      </a>
+    <h3 class="doAnchor"
+    name="unsupported_operation_in_jcl_over_slf4j">Operation
+    [suchAndSuch] is not supported in jcl-over-slf4j.
     </h3>
 
     <p>An <code>UnsuportedOperationException</code> is thrown whenever
@@ -86,12 +91,8 @@
 
     <!-- ====================================================== -->
 
-    <h3>
-      <a name="StaticLoggerBinder" href="#StaticLoggerBinder">
-        Failedto load class
-        <code>org.slf4j.impl.StaticLoggerBinder</code>
-      </a>
-    </h3>
+    <h3 class="doAnchor" name="StaticLoggerBinder">Failedto load class
+    <code>org.slf4j.impl.StaticLoggerBinder</code></h3>
     
     <p>This error is reported when the
     <code>org.slf4j.impl.StaticLoggerBinder</code> class could not be
@@ -140,10 +141,10 @@
     href="faq.html#compatibility">FAQ entry</a>.
     </p>
 -->
+
     <!-- ====================================================== -->
-    <h3>
-      <a name="multiple_bindings" href="#multiple_bindings">Multiple
-      bindings were found on the class path</a>
+    <h3 class="doAnchor" name="multiple_bindings">Multiple bindings
+    were found on the class path
     </h3>
 
 
@@ -158,19 +159,63 @@
     <em>slf4j-simple-${version}.jar</em> and
     <em>slf4j-nop-${version}.jar</em> on the class path and you wish
     to use the nop (no-operation) binding, then remove
-    <em>slf4j-simple-${version}.jar</em> from the class path. If it is
-    not possible to remove the superflous bindings, SLF4J will still
-    bind with one logging framework/implementation. As of version
-    1.6.6, SLF4J will name the framework/implementation class it is
-    actually bound to.</p>
-
-    <p><span class="label notice">Note</span> The warning emitted by
-    SLF4J is just that, a warning.
+    <em>slf4j-simple-${version}.jar</em> from the class path. 
     </p>
 
+    <p>The list of locations that SLF4J provides in this warning
+    usually provides sufficient information to identify the dependency
+    transitively pulling in an unwanted SLF4J binding into your
+    project. In your project's pom.xml file, exclude this SLF4J
+    binding when declaring the unscrupulous dependency. For example,
+    <em>cassandra-all</em> version 0.8.1 declares both <em>log4j</em>
+    and <em>slf4j-log4j12</em> as compile-time dependencies. Thus,
+    when you include <em>cassandra-all</em> a dependnecy in your
+    project, it will pulling in both <em>slf4j-log4j12.jar</em> and
+    <em>log4j.jar</em> as dependencies. In case you do not wish to use
+    log4j as the the SLF4J backend, you can instruct Maven to exclude
+    these two artifacts as shown next:</p>
+
+    <pre class="prettyprint">&lt;dependencies>
+  &lt;dependency>
+    &lt;groupId> org.apache.cassandra&lt;/groupId>
+    &lt;artifactId>cassandra-all&lt;/artifactId>
+    &lt;version>0.8.1&lt;/version>
+
+    &lt;exclusions>
+      &lt;exclusion> 
+        &lt;groupId>org.slf4j&lt;/groupId>
+        &lt;artifactId>slf4j-log4j12&lt;/artifactId>
+      &lt;/exclusion>
+      &lt;exclusion> 
+        &lt;groupId>log4j&lt;/groupId>
+        &lt;artifactId>log4j&lt;/artifactId>
+      &lt;/exclusion>
+    &lt;/exclusions> 
+
+  &lt;/dependency>
+&lt;/dependencies></pre>
+
+   <p><span class="label notice">Note</span> The warning emitted by
+   SLF4J is just that, a warning. Even when multiple bindings are
+   present, SLF4J will pick one logging framework/implementation and
+   bind with it. The way SLF4J picks a binding is determined by the
+   JVM and for all practical purposes should be considered random. As
+   of version 1.6.6, SLF4J will name the framework/implementation
+   class it is actually bound to.</p>
+
+   <p>Embedded components such as libraries or frameworks should not
+   declare a dependency on any SLF4J binding but only depend on
+   slf4j-api. When a library declares a compile-time dependency on a
+   SLF4J binding, it imposes that binding on the end-user, thus
+   negating SLF4J's purpose. When you come across an embedded
+   component declaring a compile-time dependency on any SLF4J binding,
+   please take the time to contact the authors of said
+   component/library and kindly ask them to mend their ways.</p>
+  
     <!-- ====================================================== -->
-    <h3><a name="version_mismatch" href="#version_mismatch">slf4j-api
-    version does not match that of the binding</a></h3>
+
+    <h3 class="doAnchor" name="version_mismatch">slf4j-api version
+    does not match that of the binding</h3>
 
     <p>An SLF4J binding designates an artifact such as
     <em>slf4j-jdk14.jar</em> or <em>slf4j-log4j12.jar</em> used to
@@ -201,11 +246,10 @@
     about the suspected mismatch.
     </p>
 
-
-    <h3>
-      <a name="null_LF" href="#null_LF">Logging factory implementation
-      cannot be null</a>
-    </h3>
+    <!-- ====================================================== -->
+    
+    <h3 class="doAnchor" name="null_LF">Logging factory implementation
+    cannot be null</h3>
 
     <p>This error is reported when the <code>LoggerFactory</code>
     class could not find an appropriate binding. Placing one (and only
@@ -217,11 +261,9 @@
 
     <!-- ====================================================== -->
 
-    <h3>
-      <a name="log4jDelegationLoop"
-      href="#log4jDelegationLoop">Detected both log4j-over-slf4j.jar
-      AND slf4j-log4j12.jar on the class path, preempting
-      <code>StackOverflowError</code>.</a>
+    <h3 class="doAnchor" name="log4jDelegationLoop">Detected both
+    log4j-over-slf4j.jar AND slf4j-log4j12.jar on the class path,
+    preempting <code>StackOverflowError</code>.
     </h3>
 
     <p>The purpose of slf4j-log4j12 module is to delegate or redirect
@@ -267,10 +309,9 @@
     <!-- ====================================================== -->
 
 
-    <h3>
-      <a name="jclDelegationLoop" href="#jclDelegationLoop">Detected
-      both jcl-over-slf4j.jar AND slf4j-jcl.jar on the class path,
-      preempting <code>StackOverflowError</code>.</a>
+    <h3 class="doAnchor" name="jclDelegationLoop">Detected both
+    jcl-over-slf4j.jar AND slf4j-jcl.jar on the class path, preempting
+    <code>StackOverflowError</code>.
     </h3>
 
     <p>The purpose of slf4j-jcl module is to delegate or redirect
@@ -311,12 +352,8 @@
 
     <!-- ====================================================== -->
 
-    <h3>
-      <a name="no_static_mdc_binder"
-      href="#no_static_mdc_binder">Failed to load class
-      "org.slf4j.impl.StaticMDCBinder"
-      </a>
-    </h3>
+    <h3 class="doAnchor" name="no_static_mdc_binder">Failed to load
+    class "org.slf4j.impl.StaticMDCBinder"</h3>
     
     <p>This error indicates that appropriate SLF4J binding could not
     be found on the class path. Placing one (and only one) of
@@ -326,9 +363,9 @@
     problem.
     </p>
 
-    <h3>
-      <a name="null_MDCA" href="#null_MDCA">MDCAdapter cannot be null
-      </a>
+    <!-- ====================================================== -->
+
+    <h3 class="doAnchor" name="null_MDCA">MDCAdapter cannot be null 
     </h3>
 
     <p>This error is reported when <code>org.slf4j.MDC</code> class
@@ -336,9 +373,10 @@
     previously listed item.
     </p>
 
-    
-    <h3><a name="log4j_version" href="#log4j_version">SLF4J versions
-    1.4.0 and later requires log4j 1.2.12 or later</a></h3>
+    <!-- ====================================================== -->
+
+    <h3 class="doAnchor" name="log4j_version">SLF4J versions 1.4.0 and
+    later requires log4j 1.2.12 or later</h3>
 
     <p>The trace level was added to log4j in version 1.2.12 released
     on August 29, 2005. The trace level was added to the SLF4J API in
@@ -355,9 +393,9 @@
     DEBUG.</p>
     
 
-    <h3><a name="substituteLogger" href="#substituteLogger">Substitute
-    loggers were created during the default configuration phase of the
-    underlying logging system</a></h3>
+    <h3 class="doAnchor" name="substituteLogger" >Substitute loggers
+    were created during the default configuration phase of the
+    underlying logging system</h3>
 
     <p>Highly configurable logging systems such as logback and log4j
     may create components which invoke loggers during their own
@@ -392,14 +430,14 @@
     relevant section.</a>.
     </p>
 
-
-
     <p>If you are not interested in the output from any of the
     substitute loggers, then no action is required on your part.</p>
 
 
 
-</div>
+    <script src="templates/footer.js" type="text/javascript"></script>
+  </div>
+  
 </body>
 </html>
  
