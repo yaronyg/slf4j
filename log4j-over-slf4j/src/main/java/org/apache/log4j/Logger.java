@@ -16,6 +16,7 @@
 
 package org.apache.log4j;
 
+import org.apache.log4j.spi.LoggerFactory;
 import org.slf4j.spi.LocationAwareLogger;
 
 /**
@@ -37,6 +38,10 @@ public class Logger extends Category {
 
   public static Logger getLogger(String name) {
     return Log4jLoggerFactory.getLogger(name);
+  }
+
+  public static Logger getLogger(String name, LoggerFactory loggerFactory) {
+    return Log4jLoggerFactory.getLogger(name,loggerFactory);
   }
 
   public static Logger getLogger(Class clazz) {
