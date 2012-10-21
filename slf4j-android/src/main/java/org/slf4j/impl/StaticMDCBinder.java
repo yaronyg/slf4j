@@ -1,7 +1,7 @@
 /*
  * Created 21.10.2009
  *
- * Copyright (c) 2009 SLF4J.ORG
+ * Copyright (c) 2009-2012 SLF4J.ORG
  *
  * All rights reserved.
  *
@@ -34,7 +34,6 @@ import org.slf4j.spi.MDCAdapter;
  *
  * @author Ceki G&uuml;lc&uuml;
  * @author Thorsten M&ouml;ler
- * @version $Rev:$; $Author:$; $Date:$
  */
 public class StaticMDCBinder
 {

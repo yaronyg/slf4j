@@ -1,7 +1,7 @@
 /*
  * Created 21.10.2009
  *
- * Copyright (c) 2009 SLF4J.ORG
+ * Copyright (c) 2009-2012 SLF4J.ORG
  *
  * All rights reserved.
  *
@@ -26,12 +26,14 @@
  */
 package org.slf4j.impl;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.slf4j.ILoggerFactory;
 
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -45,7 +47,8 @@ public class AndroidLoggerFactory implements ILoggerFactory
 {
 	private final Map<String, AndroidLogger> loggerMap;
 
-	static final int TAG_MAX_LENGTH = 23; // tag names cannot be longer on Android platform
+	static final int TAG_MAX_LENGTH = 23; // tag names cannot be longer than this value on Android
+	                                      // platforms older than Android 2.1 (which is API level 7);
                                          // see also android/system/core/include/cutils/property.h
                                          // and android/frameworks/base/core/jni/android_util_Log.cpp
 
@@ -57,21 +60,44 @@ public class AndroidLoggerFactory implements ILoggerFactory
 	/* @see org.slf4j.ILoggerFactory#getLogger(java.lang.String) */
 	public AndroidLogger getLogger(final String name)
 	{
-		final String actualName = forceValidName(name); // fix for bug #173
+		String tag = null;
+		try
+		{
+			// Length limitation of tags abolished since Build.VERSION_CODES.ECLAIR_MR1 (2.1, API level 7).
+			// However, the field Build.VERSION.SDK_INT as well as the class Build.VERSION_CODES exist
+			// since API level 4, which is why we use reflection to avoid compiler errors on older platforms.
+			Field sdkInt;
+			if ((sdkInt = Build.VERSION.class.getField("SDK_INT")) != null && sdkInt.getInt(null) >= 7)
+			{
+				tag = name;
+			}
+		}
+		catch (SecurityException e) { /* handled indirectly in finally block */ }
+		catch (IllegalArgumentException e) { /* handled indirectly in finally block */ }
+		catch (NoSuchFieldException e) { /* handled indirectly in finally block */ }
+		catch (IllegalAccessException e) { /* handled indirectly in finally block */ }
+		finally
+		{
+			if (tag == null) tag = forceValidName(name); // fix for bug #173
+		}
+
 
 		AndroidLogger slogger = null;
 		// protect against concurrent access of the loggerMap
 		synchronized (this)
 		{
-			slogger = loggerMap.get(actualName);
+			slogger = loggerMap.get(tag);
 			if (slogger == null)
 			{
-				if (!actualName.equals(name)) Log.i(AndroidLoggerFactory.class.getSimpleName(),
-					"Logger name '" + name + "' exceeds maximum length of " + TAG_MAX_LENGTH +
-					" characters, using '" + actualName + "' instead.");
+				if (!tag.equals(name) && Log.isLoggable(AndroidLoggerFactory.class.getSimpleName(), Log.INFO))
+				{
+					Log.i(AndroidLoggerFactory.class.getSimpleName(),
+						"SLF4J Logger name '" + name + "' exceeds maximum length of " + TAG_MAX_LENGTH +
+						" characters, using '" + tag + "' as the Android Log tag instead.");
+				}
 
-				slogger = new AndroidLogger(actualName);
-				loggerMap.put(actualName, slogger);
+				slogger = new AndroidLogger(tag);
+				loggerMap.put(tag, slogger);
 			}
 		}
 		return slogger;

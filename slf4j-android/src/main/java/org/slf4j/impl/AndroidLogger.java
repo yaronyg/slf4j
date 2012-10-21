@@ -1,7 +1,7 @@
 /*
  * Created 21.10.2009
  *
- * Copyright (c) 2009 SLF4J.ORG
+ * Copyright (c) 2009-2012 SLF4J.ORG
  *
  * All rights reserved.
  *
@@ -52,7 +52,6 @@ import android.util.Log;
  * </table>
  *
  * @author Thorsten M&ouml;ller
- * @version $Rev:$; $Author:$; $Date:$
  */
 public class AndroidLogger extends MarkerIgnoringBase
 {
@@ -92,9 +91,9 @@ public class AndroidLogger extends MarkerIgnoringBase
 	}
 
 	/* @see org.slf4j.Logger#trace(java.lang.String, java.lang.Object[]) */
-	public void trace(final String format, final Object[] argArray)
+	public void trace(final String format, final Object... arguments)
 	{
-		Log.v(name, format(format, argArray));
+		Log.v(name, format(format, arguments));
 	}
 
 	/* @see org.slf4j.Logger#trace(java.lang.String, java.lang.Throwable) */
@@ -128,9 +127,9 @@ public class AndroidLogger extends MarkerIgnoringBase
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Object[]) */
-	public void debug(final String format, final Object[] argArray)
+	public void debug(final String format, final Object... arguments)
 	{
-		Log.d(name, format(format, argArray));
+		Log.d(name, format(format, arguments));
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Throwable) */
@@ -164,9 +163,9 @@ public class AndroidLogger extends MarkerIgnoringBase
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Object[]) */
-	public void info(final String format, final Object[] argArray)
+	public void info(final String format, final Object... arguments)
 	{
-		Log.i(name, format(format, argArray));
+		Log.i(name, format(format, arguments));
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Throwable) */
@@ -200,9 +199,9 @@ public class AndroidLogger extends MarkerIgnoringBase
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Object[]) */
-	public void warn(final String format, final Object[] argArray)
+	public void warn(final String format, final Object... arguments)
 	{
-		Log.w(name, format(format, argArray));
+		Log.w(name, format(format, arguments));
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Throwable) */
@@ -236,9 +235,9 @@ public class AndroidLogger extends MarkerIgnoringBase
 	}
 
 	/* @see org.slf4j.Logger#error(java.lang.String, java.lang.Object[]) */
-	public void error(final String format, final Object[] argArray)
+	public void error(final String format, final Object... arguments)
 	{
-		Log.e(name, format(format, argArray));
+		Log.e(name, format(format, arguments));
 	}
 
 	/* @see org.slf4j.Logger#error(java.lang.String, java.lang.Throwable) */

@@ -1,7 +1,7 @@
-/* 
- * Copyright (c) 2004-2007 QOS.ch
+/*
+ * Copyright (c) 2004-2012 QOS.ch
  * All rights reserved.
- * 
+ *
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -9,10 +9,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -20,30 +20,29 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
-
 package org.slf4j.helpers;
 
-import org.slf4j.Logger;
 import org.slf4j.Marker;
 
 
 /**
- * This class serves as base for adapters or native implementations of logging systems 
- * lacking Marker support. In this implementation, methods taking marker data 
- * simply invoke the corresponding method without the Marker argument, discarding 
+ * This class serves as base for adapters or native implementations of logging systems
+ * lacking Marker support. In this implementation, methods taking marker data
+ * simply invoke the corresponding method without the Marker argument, discarding
  * any marker data passed as argument.
- * 
+ *
  * @author Ceki Gulcu
  */
-public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logger {
+public abstract class MarkerIgnoringBase extends NamedLoggerBase {
 
   private static final long serialVersionUID = 9044267456635152283L;
 
   public boolean isTraceEnabled(Marker marker) {
     return isTraceEnabled();
   }
-  
+
   public void trace(Marker marker, String msg) {
     trace(msg);
   }
@@ -56,14 +55,14 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
     trace(format, arg1, arg2);
   }
 
-  public void trace(Marker marker, String format, Object[] argArray) {
-    trace(format, argArray);
+  public void trace(Marker marker, String format, Object... arguments) {
+    trace(format, arguments);
   }
 
   public void trace(Marker marker, String msg, Throwable t) {
     trace(msg, t);
   }
-  
+
   public boolean isDebugEnabled(Marker marker) {
     return isDebugEnabled();
   }
@@ -80,8 +79,8 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
     debug(format, arg1, arg2);
   }
 
-  public void debug(Marker marker, String format, Object[] argArray) {
-    debug(format, argArray);
+  public void debug(Marker marker, String format, Object... arguments) {
+    debug(format, arguments);
   }
 
   public void debug(Marker marker, String msg, Throwable t) {
@@ -104,8 +103,8 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
     info(format, arg1, arg2);
   }
 
-  public void info(Marker marker, String format, Object[] argArray) {
-    info(format, argArray);
+  public void info(Marker marker, String format, Object... arguments) {
+    info(format, arguments);
   }
 
   public void info(Marker marker, String msg, Throwable t) {
@@ -128,15 +127,15 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
     warn(format, arg1, arg2);
   }
 
-  public void warn(Marker marker, String format, Object[] argArray) {
-    warn(format, argArray);
+  public void warn(Marker marker, String format, Object... arguments) {
+    warn(format, arguments);
   }
 
   public void warn(Marker marker, String msg, Throwable t) {
     warn(msg, t);
   }
 
- 
+
   public boolean isErrorEnabled(Marker marker) {
     return isErrorEnabled();
   }
@@ -153,8 +152,8 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
     error(format, arg1, arg2);
   }
 
-  public void error(Marker marker, String format, Object[] argArray) {
-    error(format, argArray);
+  public void error(Marker marker, String format, Object... arguments) {
+    error(format, arguments);
   }
 
   public void error(Marker marker, String msg, Throwable t) {
@@ -164,5 +163,5 @@ public abstract class MarkerIgnoringBase extends NamedLoggerBase implements Logg
   public String toString() {
 	  return this.getClass().getName()+"("+getName()+")";
   }
-  
+
 }

@@ -5,7 +5,7 @@
    Version:     $Id:$
    Author:      Thorsten Möller - University of Basel Switzerland
 
-   Copyright (c) 2009, 2010 SLF4J.ORG
+   Copyright (c) 2009-2012 SLF4J.ORG
 
    All rights reserved.
 
@@ -33,9 +33,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-<!-- We cannot inherit from root SLF4J since we would inherit JUnit dependency,
-     but Google Android (android.jar) ships with a tailored JUnit version which
-     we need to use. (Maven has no means to exclude dependency derived from parent.) -->
+<!-- We cannot inherit from root SLF4J since we would inherit the JUnit dependency,
+     but Google Android (android.jar) ships with a tailored JUnit version that
+     we need to use. (Maven has no means to exclude a dependency derived from parent.) -->
 <!--	<parent>-->
 <!--		<groupId>org.slf4j</groupId>-->
 <!--		<artifactId>slf4j-parent</artifactId>-->
@@ -46,15 +46,13 @@
      on purpose. The reason is that this project is a library (to be used by
      Android applications) but it is not an Android application itself. That's
      why we stick to packaging type 'jar' (instead of 'apk'). Except for the
-     dependency to the Android JAR it remains a standard Java project. Note that
-     we also use standard JUnit dependency rather than the classes packaged in
-     the Android JAR. -->
+     dependency to the Android JAR it remains a standard Java project. -->
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-android</artifactId>
-	<version>1.6.1-RC1</version>
+	<version>1.7.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SLF4J API and Google Android Binding</name>
 
@@ -62,9 +60,18 @@
 	<url>http://www.slf4j.org/android</url>
 	<description>SLF4J API and Google Android binding</description>
 
+	<prerequisites>
+		<maven>3.0.4</maven>
+	</prerequisites>
+
 	<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+		<compile.source.version>1.5</compile.source.version>
+		<compile.target.version>1.5</compile.target.version>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<noop.classifier>noop</noop.classifier>
+    	<noop.sourcesDirectory>${project.build.directory}/noop-src</noop.sourcesDirectory>
+    	<noop.targetDirectory>${project.build.directory}/noop-classes</noop.targetDirectory>
+  	</properties>
 
 	<licenses>
 		<license>
@@ -89,6 +96,40 @@
 		</developer>
 	</developers>
 
+	<scm>
+		<url>https://github.com/twwwt/slf4j</url>
+		<connection>scm:git:git://github.com/twwwt/slf4j.git</connection>
+		<developerConnection>scm:git:git@github.com:twwwt/slf4j.git</developerConnection>
+	</scm>
+
+	<issueManagement>
+		<system>Bugzilla</system>
+		<url>http://bugzilla.slf4j.org/</url>
+	</issueManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>User List</name>
+			<subscribe>http://www.qos.ch/mailman/listinfo/slf4j-user</subscribe>
+			<unsubscribe>http://www.qos.ch/mailman/options/slf4j-user</unsubscribe>
+			<post>slf4j-user@qos.ch</post>
+			<archive>http://www.qos.ch/pipermail/slf4j-user/</archive>
+			<otherArchives>
+				<otherArchive>http://news.gmane.org/gmane.comp.java.slf4j.user</otherArchive>
+			</otherArchives>
+		</mailingList>
+		<mailingList>
+			<name>Developer List</name>
+			<subscribe>http://www.qos.ch/mailman/listinfo/slf4j-dev</subscribe>
+			<unsubscribe>http://www.qos.ch/mailman/options/slf4j-dev</unsubscribe>
+			<post>slf4j-dev@qos.ch</post>
+			<archive>http://www.qos.ch/pipermail/slf4j-dev/</archive>
+			<otherArchives>
+				<otherArchive>http://news.gmane.org/gmane.comp.java.slf4j.devel</otherArchive>
+			</otherArchives>
+		</mailingList>
+	</mailingLists>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.android</groupId>
@@ -101,19 +142,76 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<!-- (1) Copy sources for "noop" JAR (in which SLF4J is bound to the NOOP logger). -->
+					<execution>
+						<id>copy-sources-for-noop-jar</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${noop.sourcesDirectory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.sourceDirectory}</directory>
+									<excludes>
+										<exclude>**/AndroidLogger*.java</exclude>
+									</excludes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<!-- (2) Prepare sources for "noop" JAR (in which SLF4J is bound to the NOOP logger). -->
+					<execution>
+						<id>prepare-sources-for-noop-jar</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+<!-- Use the property to specify file path once the following issue is fixed:
+	 http://code.google.com/p/maven-replacer-plugin/issues/detail?id=69&colspec=ID%20Type%20Status%20Priority%20Owner%20Summary	-->
+<!-- 							<file>${noop.sourcesDirectory}/org/slf4j/impl/StaticLoggerBinder.java</file> -->
+							<file>target/noop-src/org/slf4j/impl/StaticLoggerBinder.java</file>
+							<replacements>
+								<replacement>
+									<token>AndroidLoggerFactory</token>
+									<value>org.slf4j.helpers.NOPLoggerFactory</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<!-- Google Android requires class compatibility set to 5.0. -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>${compile.source.version}</source>
+					<target>${compile.target.version}</target>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -128,6 +226,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -148,6 +247,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -158,6 +258,49 @@
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
+				<executions>
+					<!-- (4) Create additional "noop" JAR (in which SLF4J is bound to the NOOP logger). -->
+					<execution>
+						<id>noop-jar</id>
+						<phase>package</phase>
+            			<goals>
+            				<goal>jar</goal>
+            			</goals>
+						<configuration>
+							<classifier>${noop.classifier}</classifier>
+							<classesDirectory>${noop.targetDirectory}</classesDirectory>
+							<useDefaultManifestFile>true</useDefaultManifestFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<!-- (3) Compile sources for "noop" JAR (in which SLF4J is bound to the NOOP logger).
+					         We cannot use maven-compiler-plugin because we need to compile twice with
+					         different source folders, which is not possible. -->
+					<execution>
+						<id>compile-for-noop-jar</id>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<target>
+								<property name="compile_classpath" refid="maven.compile.classpath"/>
+<!-- 								<echo message="compile classpath: ${compile_classpath}"/> -->
+								<mkdir dir="${noop.targetDirectory}"/>
+								<javac srcdir="${noop.sourcesDirectory}" destdir="${noop.targetDirectory}"
+								       source="${compile.source.version}" target="${compile.target.version}"
+								       classpath="${compile_classpath}" includeAntRuntime="false"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
