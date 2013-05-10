@@ -52,13 +52,19 @@
 
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-android</artifactId>
-	<version>1.7.2-SNAPSHOT</version>
+	<!-- As per definition, we keep this project's version in sync with the
+	     SLF4J API dependency. This policy stems from a necessity in the early
+	     days of slf4j-android where it had to be bundled together with the
+	     SLF4J API in one JAR file (because of intrinsics in Android's Dexer).
+	     Actually it's no longer required these days, but, well, let's stick
+	     to it. -->
+	<version>1.7.2</version>
 	<packaging>jar</packaging>
-	<name>SLF4J API and Google Android Binding</name>
+	<name>SLF4J Google Android binding</name>
 
 	<inceptionYear>2009</inceptionYear>
 	<url>http://www.slf4j.org/android</url>
-	<description>SLF4J API and Google Android binding</description>
+	<description>SLF4J binding implementation that simply delegates to the Google Android Log API</description>
 
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -67,7 +73,7 @@
 	<properties>
 		<compile.source.version>1.5</compile.source.version>
 		<compile.target.version>1.5</compile.target.version>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     	<noop.classifier>noop</noop.classifier>
     	<noop.sourcesDirectory>${project.build.directory}/noop-src</noop.sourcesDirectory>
     	<noop.targetDirectory>${project.build.directory}/noop-classes</noop.targetDirectory>
@@ -137,10 +143,38 @@
 			<version>1.5_r4</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>enforce-property</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireProperty><!-- required by Javadoc to include links to Android API -->
+									<property>env.ANDROID_HOME</property>
+									<message>You must set ANDROID_HOME environment variable!</message>
+								</requireProperty>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -172,7 +206,7 @@
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>
-				<version>1.5.1</version>
+				<version>1.5.2</version>
 				<executions>
 					<!-- (2) Prepare sources for "noop" JAR (in which SLF4J is bound to the NOOP logger). -->
 					<execution>
@@ -182,10 +216,7 @@
 							<goal>replace</goal>
 						</goals>
 						<configuration>
-<!-- Use the property to specify file path once the following issue is fixed:
-	 http://code.google.com/p/maven-replacer-plugin/issues/detail?id=69&colspec=ID%20Type%20Status%20Priority%20Owner%20Summary	-->
-<!-- 							<file>${noop.sourcesDirectory}/org/slf4j/impl/StaticLoggerBinder.java</file> -->
-							<file>target/noop-src/org/slf4j/impl/StaticLoggerBinder.java</file>
+							<file>${noop.sourcesDirectory}/org/slf4j/impl/StaticLoggerBinder.java</file>
 							<replacements>
 								<replacement>
 									<token>AndroidLoggerFactory</token>
@@ -201,7 +232,7 @@
 				<!-- Google Android requires class compatibility set to 5.0. -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>3.1</version>
 				<configuration>
 					<source>${compile.source.version}</source>
 					<target>${compile.target.version}</target>
@@ -224,6 +255,39 @@
 			</plugin>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>${compile.source.version}</source>
+					<quiet>true</quiet>
+					<windowtitle>SLF4J Google Android binding</windowtitle>
+					<doctitle>SLF4J Android ${project.version}</doctitle>
+					<detectLinks>false</detectLinks>
+					<links>
+						<link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+						<link>http://www.slf4j.org/apidocs</link>
+					</links>
+					<!-- workaround for missing package-list file in online Android Javadoc, see
+					http://stackoverflow.com/questions/2818204/how-to-generate-links-to-the-android-classes-reference-in-javadoc -->
+					<offlineLinks>
+						<offlineLink>
+							<url>http://developer.android.com/reference</url>
+							<location>${env.ANDROID_HOME}/docs/reference</location>
+						</offlineLink>
+					</offlineLinks>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>2.3.7</version>
@@ -237,7 +301,6 @@
 				</executions>
 				<configuration>
 					<instructions>
-						<Export-Package>org.slf4j,org.slf4j.spi,org.slf4j.helpers</Export-Package>
 						<Private-Package>org.slf4j.impl</Private-Package>
 						<RequiredExecutionEnvironment>J2SE-1.5</RequiredExecutionEnvironment>
 					</instructions>
@@ -281,8 +344,8 @@
 				<version>1.7</version>
 				<executions>
 					<!-- (3) Compile sources for "noop" JAR (in which SLF4J is bound to the NOOP logger).
-					         We cannot use maven-compiler-plugin because we need to compile twice with
-					         different source folders, which is not possible. -->
+					         We cannot use maven-compiler-plugin since we need to compile twice during
+					         compile phase with separate source/target folders, which is not possible. -->
 					<execution>
 						<id>compile-for-noop-jar</id>
 						<goals>
@@ -291,6 +354,10 @@
 						<phase>compile</phase>
 						<configuration>
 							<target>
+								<!-- Workaround for Maven antrun plugin intrinsics, see
+								     http://stackoverflow.com/questions/2022622/java-home-gets-mangled-by-maven -->
+								<property name="build.compiler" value="extJavac"/>
+
 								<property name="compile_classpath" refid="maven.compile.classpath"/>
 <!-- 								<echo message="compile classpath: ${compile_classpath}"/> -->
 								<mkdir dir="${noop.targetDirectory}"/>
