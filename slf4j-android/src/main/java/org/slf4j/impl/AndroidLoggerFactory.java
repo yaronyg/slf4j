@@ -26,9 +26,9 @@
  */
 package org.slf4j.impl;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.ILoggerFactory;
 
@@ -43,7 +43,7 @@ import android.util.Log;
  */
 public class AndroidLoggerFactory implements ILoggerFactory
 {
-	private final Map<String, AndroidLogger> loggerMap;
+	private final ConcurrentMap<String, AndroidLogger> loggerMap;
 
 	static final int TAG_MAX_LENGTH = 23; // tag names cannot be longer on Android platform
                                          // see also android/system/core/include/cutils/property.h
@@ -51,7 +51,7 @@ public class AndroidLoggerFactory implements ILoggerFactory
 
 	public AndroidLoggerFactory()
 	{
-		loggerMap = new HashMap<String, AndroidLogger>();
+		loggerMap = new ConcurrentHashMap<String, AndroidLogger>();
 	}
 
 	/* @see org.slf4j.ILoggerFactory#getLogger(java.lang.String) */
@@ -59,30 +59,27 @@ public class AndroidLoggerFactory implements ILoggerFactory
 	{
 		final String tag = forceValidName(name); // fix for bug #173
 
-		AndroidLogger slogger = null;
-		// protect against concurrent access of the loggerMap
-		synchronized (this)
-		{
-			slogger = loggerMap.get(tag);
-			if (slogger == null)
-			{
-				if (!tag.equals(name) && Log.isLoggable(AndroidLoggerFactory.class.getSimpleName(), Log.INFO))
-				{
-					Log.i(AndroidLoggerFactory.class.getSimpleName(), new StringBuilder("SLF4J Logger name '")
-						.append(name)
-						.append("' exceeds maximum length of ")
-						.append(TAG_MAX_LENGTH)
-						.append(" characters; using '")
-						.append(tag)
-						.append("' as the Android Log tag instead.")
-						.toString());
-				}
+		AndroidLogger logger = loggerMap.get(tag);
+	   if (logger != null) return logger;
 
-				slogger = new AndroidLogger(tag);
-				loggerMap.put(tag, slogger);
-			}
-		}
-		return slogger;
+	   logger = new AndroidLogger(tag);
+	   AndroidLogger loggerPutBefore = loggerMap.putIfAbsent(tag, logger);
+	   if (null == loggerPutBefore)
+	   {
+	   	if (!tag.equals(name) && Log.isLoggable(AndroidLoggerFactory.class.getSimpleName(), Log.WARN))
+	   	{
+	   		Log.i(AndroidLoggerFactory.class.getSimpleName(), new StringBuilder("SLF4J Logger name '")
+	   		.append(name)
+	   		.append("' exceeds maximum length of ")
+	   		.append(TAG_MAX_LENGTH)
+	   		.append(" characters; using '")
+	   		.append(tag)
+	   		.append("' as the Android Log tag instead.")
+	   		.toString());
+	   	}
+	   	return logger;
+	   }
+	   return loggerPutBefore;
 	}
 
 	/**
