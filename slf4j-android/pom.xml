@@ -107,6 +107,13 @@
 		<connection>scm:git:git://github.com/twwwt/slf4j.git</connection>
 		<developerConnection>scm:git:git@github.com:twwwt/slf4j.git</developerConnection>
 	</scm>
+	
+	<distributionManagement>
+        <repository>
+            <id>central</id>
+            <url>http://thaliartifactory.cloudapp.net/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
 
 	<issueManagement>
 		<system>Bugzilla</system>
